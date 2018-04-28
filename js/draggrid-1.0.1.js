@@ -95,7 +95,7 @@ $(function () {
          */
         transform: function (shiftLength, parentContainerLength) {
             var _this = this;
-            var xs = ((shiftLength - 5) / parentContainerLength * 100);
+            var xs = ((shiftLength - 2) / parentContainerLength * 100);
             var temp = null;
             $.each(_this.scaleList, function (i, _d) {
                 if (_d > xs && _d <= _this.scaleList[i + 1]) {
@@ -113,15 +113,31 @@ $(function () {
         },
         getTransformDivObj: function () {
             return panel.getCurrentSuperiorDivObj().divObj;
+        },
+        initScaleList : function(){
+            var temp = [];
+            temp.push(0);
+            for( var i = 1; i <= 84; i++ ){
+                temp.push(100/84*i);
+            }
+            temp.push(200);
+            this.scaleList = temp;
+            console.log(temp)
         }
     };
+    
+    scaling.initScaleList();
 
 
 
     $(document).mouseup(function (event) {
+        
+//            opacity: 0.7;
         $(this).unbind("mousemove");
         if (null != cache.currentDivObj) {
             panel.setOrResetZIndex(cache.currentDivObj, true);
+            cache.currentDivObj.css("opacity", "1");
+            
             cache.currentDivObj = null;
         }
     });
@@ -130,6 +146,7 @@ $(function () {
     $('[name=banner]').mousedown(function (event) {
         var div = cache.currentDivObj = panel.getContainerDiv(this);
         panel.setOrResetZIndex(div, false);
+        cache.currentDivObj.css("opacity", "0.8");
 
         //获取当前面板的坐标
         var abs_x = event.pageX - div.offset().left;

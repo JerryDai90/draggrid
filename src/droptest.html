@@ -5,7 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <title>Qing's Web</title>
     <script src="http://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
-    <script src="../js/draggrid-1.0.1.js"></script>
     <style type="text/css">
         .moveBar {
             position: absolute;
@@ -14,6 +13,9 @@
             background: #666;
             /*            border: solid 1px #000;*/
             /*            box-sizing: border-box;*/
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         .banner {
@@ -63,8 +65,9 @@
     </style>
 </head>
 
-<body style="margin: 0px;">
+<body style="margin: 0px;" id="container">
 
+<!--
     <div class="moveBar">
         <div name="banner" class="banner">按住此处移动当前div</div>
         <div class="content">这里是其它内容</div>
@@ -89,8 +92,6 @@
             <span></span>
             <span name="resize" style="cursor: nwse-resize;"></span>
 
-
-
             <div data-ischild="true" data-ispanel class="moveBar xybox x-17 y-12" style="background: green; position: absolute; margin: 0px; height: 29.16666667%; width: 29.16666667%;">
                 <div name="banner" class="banner">按住此处移动当前div</div>
                 <span></span>
@@ -98,16 +99,14 @@
                 <span></span>
                 <span name="resize" style="cursor: nwse-resize;"></span>
             </div>
-
-
         </div>
     </div>
-
 
     <div class="moveBar2" style="width: 200px; height: 200px; background: red;" draggable="true">
         <div name="banner2" class="banner2">按住此处移动当前div</div>
 
     </div>
+-->
 
 </body>
     
@@ -115,9 +114,54 @@
         $(function(){
             
             
+            var x = [
+                '#2E2EFE', '#FF00BF', '#FACC2E', '#FAAC58', '#61210B', '#08088A', '#E6E6E6'
+            ]
             
+            var html = '\
+                        <div class="moveBar" data-ispanel id="$id" data-pid="$pid" style="background: $background; top: $top%; left:$left%; width:$width%; height:$height%;">\
+                            <div name="banner" class="banner">$name</div>\
+                            <div class="content">这里是其它内容</div>\
+                            <span></span>\
+                            <span></span>\
+                            <span></span>\
+                            <span name="resize" style="cursor: nwse-resize;"></span>\
+                        </div>';
+            
+            var data = [
+                {id: '001', pId: '-1', name: 'test001', x: '0', y: '0', width: '50.00000000', height: '25.00000000'},
+                {id: '002', pId: '001', name: 'test002', x: '50', y: '0', width: '50.00000000', height: '100.00000000'},
+                {id: '003', pId: '-1', name: 'test003', x: '50', y: '0', width: '50.00000000', height: '25.00000000'},
+                {id: '004', pId: '003', name: 'test004', x: '0', y: '0', width: '50.00000000', height: '25.00000000'},
+                {id: '005', pId: '001', name: 'test005', x: '0', y: '0', width: '50.00000000', height: '100.00000000'},
+                {id: '006', pId: '005', name: 'test006', x: '25', y: '25', width: '50.00000000', height: '25.00000000'}
+            ];
+            
+            var template = function(i, _d){
+                var temp = html.replace(/\$id/g, _d.id).replace(/\$name/g, _d.name)
+                                .replace(/\$top/g, _d.y).replace(/\$left/g, _d.x)
+                                .replace(/\$width/g, _d.width).replace(/\$height/g, _d.height)
+                                .replace(/\$pid/g, _d.pId)
+                                .replace(/\$background/g, x[i]);
+                return temp;
+            }
+            
+            $.each(data, function(i, _d){
+                if( _d.pId == '-1' ){
+                    $("#container").append(template(i, _d));
+                }
+            });
+            
+            //子模块要算出先后顺序，否则会找不到父容器。
+            $.each(data, function(i, _d){
+                if( _d.pId != '-1' ){
+                    $("#"+_d.pId).children("[name=resize]").after(template(i, _d));
+                }
+            });
             
         });
     </script>
+    
+    <script src="../js/draggrid-1.0.1.js"></script>
 
 </html>
