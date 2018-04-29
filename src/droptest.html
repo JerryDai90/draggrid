@@ -20,8 +20,8 @@
         }
 
         .banner {
-            background: #52CCCC;
-            cursor: move;
+/*            background: #c6c6c0;*/
+            
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
@@ -29,7 +29,10 @@
             position: absolute;
             z-index: 1;
             right: 0px;
+            display: none;
         }
+        
+        .moveBar:hover .banner{display:block;} 
 
         
         .draggrid-resize-img {
@@ -39,7 +42,24 @@
             right: 0px;
             width: 40px;
             height: 40px;
-            content: url(../css/resize-bottom-right.png);  
+            content: url(../icon/resize-bottom-right.png);  
+        }
+        
+        .draggrid-btn-base-img{
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            padding: 3px 3px 1px 2px;
+        }
+        .draggrid-btn-delete-img {
+            content: url(../icon/delete.png);  
+        }
+        .draggrid-btn-move-img {
+            cursor: move;
+            content: url(../icon/move.png);  
+        }
+        .draggrid-btn-resize-img {
+            content: url(../icon/move-resize-variant.png);  
         }
         
         .draggrid-hide{

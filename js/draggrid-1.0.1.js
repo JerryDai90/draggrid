@@ -201,9 +201,9 @@
         var html = '\
                     <div class="moveBar" name="moveBar" data-ispanel id="$id" data-pid="$pid" style="background: $background; top: $top%; left:$left%; width:$width%; height:$height%;">\
                         <div name="banner" class="banner">\
-                            <a name="_btnDel_">删除</a>\
-                            <a name="_btnMove_">移动</a>\
-                            <a name="_btnTriggerResize_">修改大小</a>\
+                            <a class="draggrid-btn-delete-img draggrid-btn-base-img" name="_btnDel_" title="删除"></a>\
+                            <a class="draggrid-btn-move-img draggrid-btn-base-img" name="_btnMove_" title="移动"></a>\
+                            <a class="draggrid-btn-resize-img draggrid-btn-base-img" name="_btnTriggerResize_" title="修改大小"></a>\
                         </div>\
                         <div name="childShade" style="width:100%; height: 100%; display: none; position: absolute; z-index: 10; background: white; opacity: 0.5;">\
                             <img class="draggrid-resize-img" name="_resize_"></img>\
