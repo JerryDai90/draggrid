@@ -136,7 +136,7 @@ $(function () {
         $(this).unbind("mousemove");
         if (null != cache.currentDivObj) {
             panel.setOrResetZIndex(cache.currentDivObj, true);
-            cache.currentDivObj.css("opacity", "1");
+            cache.currentDivObj.removeClass("opacity");
             
             cache.currentDivObj = null;
         }
@@ -146,7 +146,7 @@ $(function () {
     $('[name=banner]').mousedown(function (event) {
         var div = cache.currentDivObj = panel.getContainerDiv(this);
         panel.setOrResetZIndex(div, false);
-        cache.currentDivObj.css("opacity", "0.8");
+        cache.currentDivObj.addClass("opacity");
 
         //获取当前面板的坐标
         var abs_x = event.pageX - div.offset().left;
