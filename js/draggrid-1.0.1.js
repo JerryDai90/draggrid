@@ -75,7 +75,7 @@
              * 获取当前选中的面板 div 的父容器信息，每个面板 div 务必携带属性 data-ispanel
              */
             getCurrentSuperiorDivObj: function () {
-                debugger;
+//                debugger;
                 var temp = {
                     divObj: $(window),
                     isWindow: true
@@ -109,7 +109,7 @@
                 //获取先对符框的顶点坐标，用于移动的时候减去外面的偏移量
                 var left = 0;
                 var top = 0;
-                debugger;
+//                debugger;
                 var currentSuperiorDivObj = this.getCurrentSuperiorDivObj();
                 if (!currentSuperiorDivObj.isWindow) {
                     left = currentSuperiorDivObj.divObj.offset().left;
@@ -147,9 +147,15 @@
 
                 //获取先对符框的顶点坐标，用于移动的时候减去外面的偏移量
                 var parentContainerInvalidOffset = util.panel.getParentContainerInvalidOffset();
-                console.log(parentContainerInvalidOffset)
+//                console.log(parentContainerInvalidOffset)
 
                 $(document).mousemove(function (event2) {
+                    
+//                    console.log((parseFloat(div.css("top")) + parseFloat(div.css("height")))+"--"+parseFloat(util.panel.getCurrentSuperiorDivObj().divObj.css("height")))
+//                    if( (parseFloat(div.css("top")) + parseFloat(div.css("height"))) >= parseFloat(util.panel.getCurrentSuperiorDivObj().divObj.css("height")) ){
+//                        return;
+//                    }
+                    
                     div.css({
                         'left': util.scaling.transformX(event2.pageX - parentContainerInvalidOffset.left - abs_x),
                         'top': util.scaling.transformY(event2.pageY - parentContainerInvalidOffset.top - abs_y),
@@ -163,6 +169,7 @@
                 //面板对象    
                 var div = self._cache.currentDivObj = util.panel.getContainerDiv(this);
                 util.panel.setOrResetZIndex(div, false);
+                div.children("[name=childShade]").show();
 
                 //获取当前此面板的 xy 定点坐标，用于算出面板宽度
                 var left = div.offset().left;
@@ -198,17 +205,16 @@
         <span class="draggrid-hide"></span>\
                             <span class="draggrid-hide"></span>\
                             <span class="draggrid-hide"></span>\*/
-        var html = '\
-                    <div class="moveBar" name="moveBar" data-ispanel id="$id" data-pid="$pid" style="background: $background; top: $top%; left:$left%; width:$width%; height:$height%;">\
-                        <div name="banner" class="banner">\
+        var html = '<div class="moveBar" name="moveBar" data-ispanel id="$id" data-pid="$pid" style="z-index: $z-index; background: $background; top: $top%; left:$left%; width:$width%; height:$height%;">\
+                        <div name="banner" class="banner draggrid-none-select">\
                             <a class="draggrid-btn-delete-img draggrid-btn-base-img" name="_btnDel_" title="删除"></a>\
                             <a class="draggrid-btn-move-img draggrid-btn-base-img" name="_btnMove_" title="移动"></a>\
                             <a class="draggrid-btn-resize-img draggrid-btn-base-img" name="_btnTriggerResize_" title="修改大小"></a>\
                         </div>\
                         <div name="childShade" style="width:100%; height: 100%; display: none; position: absolute; z-index: 10; background: white; opacity: 0.5;">\
-                            <img class="draggrid-resize-img" name="_resize_"></img>\
+                            <img class="draggrid-resize-img" name="_resize_" style="z-index: $z-index;"></img>\
                         </div>\
-                        <div name="childPanel" style="width:100%; height: 100%; position: absolute;"></div>\
+                        <div name="childPanel" style="width:100%; height: 100%; position: absolute;" data-loadMode="$loadMode" data-url="$url"></div>\
                     </div>';
          var x = [
             '#2E2EFE', '#FF00BF', '#FACC2E', '#FAAC58', '#61210B', '#08088A', '#E6E6E6'
@@ -218,6 +224,8 @@
                             .replace(/\$top/g, _d.y).replace(/\$left/g, _d.x)
                             .replace(/\$width/g, _d.width).replace(/\$height/g, _d.height)
                             .replace(/\$pid/g, _d.pId)
+                            .replace(/\$loadMode/g, _d.loadMode).replace(/\$url/g, _d.url)
+                            .replace(/\$z-index/g, _d.zIndex)
                             .replace(/\$background/g, x[i]);
             return temp;
         }
@@ -232,18 +240,33 @@
             //子模块要算出先后顺序，否则会找不到父容器。
             $.each(jsonData, function(i, _d){
                 if( _d.pId != '-1' ){
+                    //反向查询查询层级关系，设置值就不会出现穿透问题。
+                    var zIndex = $("#"+_d.pId).find("[name=_resize_]").css("z-index");
+                    zIndex = "auto" == zIndex || zIndex ? 0 : parseInt(zIndex);
+                    _d.zIndex = ++zIndex;
                     $("#"+_d.pId).children("[name=childPanel]").html(template(i, _d));
                 }
             });
+            
+            //构建子页面
+            $.each(containerObj.find("[name=childPanel]"), function(i, _d){
+                
+                if( $(_d).html().length == 0 ){
+                    var url = $(_d).attr("data-url");
+                    var loadMode = $(_d).attr("data-loadmode");
+                    if( loadMode == "iframe" ){
+                      var childHtml = '<iframe style="border:0px;" width="100%" height="100%" src="'+url+'"></iframe>'
+                      $(_d).html(childHtml);
+                    }else if( loadMode == "div" ){
+//                        debugger;
+                        $(_d).load(url, function(){
+//                            console.log(111111)
+                        });
+                    }
+                }
+            })
         }
         
-        self.on = {
-            addGridCallback : function(){}
-            
-        }
-
-
-
         var init = function () {
             util.scaling.initScaleList(self.option.gridNumber);
             event();
@@ -253,9 +276,5 @@
         containerObj.data("obj", self);
         return self;
     }
-
-//    draggrid({
-//        gridNumber: 48
-//    });
 
 //});

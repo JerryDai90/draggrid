@@ -9,13 +9,13 @@
 }
 
 .banner {
-    /*            background: #c6c6c0;*/
+    background: #7a6e6e;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     float: right;
     position: absolute;
-    z-index: 1;
+/*    z-index: 1;*/
     right: 0px;
     display: none;
 }
@@ -42,6 +42,9 @@
     width: 20px;
     height: 20px;
     padding: 3px 3px 1px 2px;
+}
+
+.draggrid-none-select{
     /*不允许出现选中*/
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -49,7 +52,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-
 }
 
 .draggrid-btn-delete-img {
@@ -65,10 +67,18 @@
     content: url(../icon/move-resize-variant.png);
 }
 /*只显示当前层*/
+
 .moveBar:hover >.banner {
     display: block;
+    z-index: 1;
+/*    background-color:darkgrey;*/
 }
 
+/*只显示当前层*/
+.moveBar:hover >.draggrid-resize-img {
+    display: block !important;
+    
+}
 
 .draggrid-hide {
     display: none;
