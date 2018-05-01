@@ -90,7 +90,7 @@
                 return temp;
             },
             getContainerDiv: function (_this) {
-                return $(_this).closest('div.moveBar');
+                return $(_this).closest('div.draggrid-panel');
             },
             setOrResetZIndex: function (obj, isResetAction) {
                 var zindex = 0;
@@ -205,16 +205,16 @@
         <span class="draggrid-hide"></span>\
                             <span class="draggrid-hide"></span>\
                             <span class="draggrid-hide"></span>\*/
-        var html = '<div class="moveBar" name="moveBar" data-ispanel id="$id" data-pid="$pid" style="z-index: $z-index; background: $background; top: $top%; left:$left%; width:$width%; height:$height%;">\
-                        <div name="banner" class="banner draggrid-none-select">\
+        var html = '<div class="draggrid-panel" name="moveBar" data-ispanel id="$id" data-pid="$pid" style="z-index: $z-index; background: $background; top: $top%; left:$left%; width:$width%; height:$height%;">\
+                        <div name="banner" class="draggrid-operation draggrid-none-select">\
                             <a class="draggrid-btn-delete-img draggrid-btn-base-img" name="_btnDel_" title="删除"></a>\
                             <a class="draggrid-btn-move-img draggrid-btn-base-img" name="_btnMove_" title="移动"></a>\
                             <a class="draggrid-btn-resize-img draggrid-btn-base-img" name="_btnTriggerResize_" title="修改大小"></a>\
                         </div>\
-                        <div name="childShade" style="width:100%; height: 100%; display: none; position: absolute; z-index: 10; background: white; opacity: 0.5;">\
+                        <div name="childShade" class="draggrid-fullscreen draggrid-childshade draggrid-hide">\
                             <img class="draggrid-resize-img" name="_resize_" style="z-index: $z-index;"></img>\
                         </div>\
-                        <div name="childPanel" style="width:100%; height: 100%; position: absolute;" data-loadMode="$loadMode" data-url="$url"></div>\
+                        <div name="childPanel" class="draggrid-fullscreen draggrid-childpanel" data-loadMode="$loadMode" data-url="$url"></div>\
                     </div>';
          var x = [
             '#2E2EFE', '#FF00BF', '#FACC2E', '#FAAC58', '#61210B', '#08088A', '#E6E6E6'
@@ -242,7 +242,8 @@
                 if( _d.pId != '-1' ){
                     //反向查询查询层级关系，设置值就不会出现穿透问题。
                     var zIndex = $("#"+_d.pId).find("[name=_resize_]").css("z-index");
-                    zIndex = "auto" == zIndex || zIndex ? 0 : parseInt(zIndex);
+                    zIndex = "auto" == zIndex || zIndex == undefined ? 0 : parseInt(zIndex);
+//                    console.log(zIndex)
                     _d.zIndex = ++zIndex;
                     $("#"+_d.pId).children("[name=childPanel]").html(template(i, _d));
                 }

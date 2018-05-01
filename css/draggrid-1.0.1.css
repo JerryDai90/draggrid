@@ -1,4 +1,5 @@
-.moveBar {
+/*最外层面板*/
+.draggrid .draggrid-panel {
     position: absolute;
     width: 50.000000000%;
     height: 50.000000000%;
@@ -8,26 +9,19 @@
     overflow: hidden;
 }
 
-.banner {
+/*--------------------begin删除、修改、移动按面板钮样式------------------*/
+.draggrid .draggrid-operation {
     background: #7a6e6e;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     float: right;
     position: absolute;
-/*    z-index: 1;*/
     right: 0px;
     display: none;
 }
-
-
-.opacity {
-    opacity: 0.7 !important;
-}
-
 /*删除、修改、移动按钮样式*/
-
-.draggrid-resize-img {
+.draggrid .draggrid-resize-img {
     cursor: nwse-resize;
     position: absolute;
     bottom: 0px;
@@ -36,16 +30,16 @@
     height: 40px;
     content: url(../icon/resize-bottom-right.png);
 }
-
-.draggrid-btn-base-img {
+/*按钮基础样式*/
+.draggrid .draggrid-btn-base-img {
     cursor: pointer;
     width: 20px;
     height: 20px;
     padding: 3px 3px 1px 2px;
 }
-
-.draggrid-none-select{
-    /*不允许出现选中*/
+ /*不允许出现选中*/
+.draggrid .draggrid-none-select {
+   
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -53,33 +47,54 @@
     -ms-user-select: none;
     user-select: none;
 }
-
-.draggrid-btn-delete-img {
+/*删除按钮*/
+.draggrid .draggrid-btn-delete-img {
     content: url(../icon/delete.png);
 }
-
-.draggrid-btn-move-img {
+/*移动按钮*/
+.draggrid .draggrid-btn-move-img {
     cursor: move;
     content: url(../icon/move.png);
 }
-
-.draggrid-btn-resize-img {
+/*修改大小按钮*/
+.draggrid .draggrid-btn-resize-img {
     content: url(../icon/move-resize-variant.png);
 }
-/*只显示当前层*/
+/*--------------------end删除、修改、移动按面板钮样式------------------*/
 
-.moveBar:hover >.banner {
+/*子面板样式*/
+.draggrid .draggrid-childpanel {
+    position: absolute;
+}
+
+/*移动的时候透明度*/
+.draggrid .opacity {
+    opacity: 0.4 !important;
+}
+
+/*只显示当前层*/
+.draggrid .draggrid-panel:hover > .draggrid-operation {
     display: block;
     z-index: 1;
-/*    background-color:darkgrey;*/
 }
-
 /*只显示当前层*/
-.moveBar:hover >.draggrid-resize-img {
+.draggrid .draggrid-panel:hover > .draggrid-resize-img {
     display: block !important;
-    
+
+}
+/*全屏*/
+.draggrid .draggrid-fullscreen {
+    width: 100%;
+    height: 100%;
+}
+/*移动遮罩层*/
+.draggrid .draggrid-childshade {
+    position: absolute;
+    z-index: 10;
+    background: white;
+    opacity: 0.4;
 }
 
-.draggrid-hide {
+.draggrid .draggrid-hide {
     display: none;
 }
