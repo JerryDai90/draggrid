@@ -65,7 +65,7 @@ var draggrid = function (containerObj, option) {
             }
             temp.push(200);
             this.scaleList = temp;
-            console.log(temp);
+            // console.log(temp);
         }
     }
 
@@ -151,7 +151,7 @@ var draggrid = function (containerObj, option) {
 
             $(document).mousemove(function (event2) {
 
-                console.log((parseFloat(div.css("top")) + parseFloat(div.css("height"))) + "--" + parseFloat(util.panel.getCurrentSuperiorDivObj().divObj.height()));
+                // console.log((parseFloat(div.css("top")) + parseFloat(div.css("height"))) + "--" + parseFloat(util.panel.getCurrentSuperiorDivObj().divObj.height()));
 
                 //                    if(event.pageY - event2.pageY <= 0){
                 //                        if( (parseFloat(div.css("top")) + parseFloat(div.height())) >= parseFloat(util.panel.getCurrentSuperiorDivObj().divObj.height()) ){
@@ -224,9 +224,9 @@ var draggrid = function (containerObj, option) {
 
     //<div name="childPanel" style="width: 100%;height: 100%;"></div>\
     /*
-    <span class="draggrid-hide"></span>\
-                        <span class="draggrid-hide"></span>\
-                        <span class="draggrid-hide"></span>\*/
+     <span class="draggrid-hide"></span>\
+     <span class="draggrid-hide"></span>\
+     <span class="draggrid-hide"></span>\*/
     var html = '<div class="draggrid-panel" name="_panel_div_" data-ispanel id="$id" data-pid="$pid" data-loadMode="$loadMode" data-url="$url" style="z-index: $z-index; background: $background; top: $top%; left:$left%; width:$width%; height:$height%;">\
                         <div name="banner" class="draggrid-operation draggrid-none-select">\
                             <a class="draggrid-btn-delete-img draggrid-btn-base-img" name="_btnDel_" title="删除"></a>\
@@ -239,8 +239,8 @@ var draggrid = function (containerObj, option) {
                         <div name="childPanel" class="draggrid-fullscreen draggrid-childpanel" data-loadMode="$loadMode" data-url="$url"></div>\
                     </div>';
     var x = [
-            '#2E2EFE', '#FF00BF', '#FACC2E', '#FAAC58', '#61210B', '#08088A', '#E6E6E6'
-        ];
+        '#2E2EFE', '#FF00BF', '#FACC2E', '#FAAC58', '#61210B', '#08088A', '#E6E6E6'
+    ];
     var template = function (i, _d) {
         var temp = html.replace(/\$id/g, _d.id).replace(/\$name/g, _d.name)
             .replace(/\$top/g, _d.y).replace(/\$left/g, _d.x)
@@ -248,7 +248,7 @@ var draggrid = function (containerObj, option) {
             .replace(/\$pid/g, _d.pId)
             .replace(/\$loadMode/g, _d.loadMode).replace(/\$url/g, _d.url)
             .replace(/\$z-index/g, _d.zIndex)
-            .replace(/\$background/g, x[i]);
+            .replace(/\$background/g, "");
         return temp;
     }
 
@@ -267,12 +267,13 @@ var draggrid = function (containerObj, option) {
                 zIndex = "auto" == zIndex || zIndex == undefined ? 0 : parseInt(zIndex);
                 //                    console.log(zIndex)
                 _d.zIndex = ++zIndex;
-                $("#" + _d.pId).children("[name=childPanel]").html(template(i, _d));
+                $("#" + _d.pId).children("[name=childPanel]").append(template(i, _d));
             }
         });
 
         //构建子页面
         $.each(containerObj.find("[name=childPanel]"), function (i, _d) {
+
 
             if ($(_d).html().length == 0) {
                 var url = $(_d).attr("data-url");
@@ -294,10 +295,10 @@ var draggrid = function (containerObj, option) {
             _data.push({
                 id : $(_d).attr("id"),
                 pId : $(_d).attr("data-pid") || "-1",
-                x : _d.style.top,
-                y : _d.style.left,
-                width : _d.style.width,
-                height : _d.style.height,
+                x : parseFloat(_d.style.left),
+                y : parseFloat(_d.style.top),
+                width : parseFloat(_d.style.width),
+                height : parseFloat(_d.style.height),
                 loadMode : $(_d).attr("data-loadMode"),
                 url : $(_d).attr("data-url") || ""
             })

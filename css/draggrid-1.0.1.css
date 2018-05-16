@@ -3,7 +3,9 @@
     position: absolute;
     width: 50.000000000%;
     height: 50.000000000%;
-    background: #666;
+    background: #f7f7f70f;
+/*    border: 1px solid #0c202c;*/
+
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
