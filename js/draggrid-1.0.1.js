@@ -6,7 +6,10 @@ $.fn.draggrid = function (defOpt) {
 
 var draggrid = function (containerObj, option) {
     //        var containerId = "container";
-
+    
+    //设置标记为边框
+    containerObj.attr("data-ispanel", "");
+    
     var self = this;
     var defOpt = {
         /*切割的格子个数*/
@@ -15,6 +18,14 @@ var draggrid = function (containerObj, option) {
         btnMoveName: "_btnMove_",
         /*触发改变大小的元素名称*/
         btnResizeName: "_resize_",
+        btnEditName: "_btnEdit_",
+        on : {
+            onResize : function(mouseEvent, panelDivObj){},
+            onMove : function(mouseEvent, panelDivObj){},
+            onEdit : function(panelDivObj){},
+            onDelete : function(panelDivObj){}
+            
+        }
 
     }
 
@@ -169,6 +180,8 @@ var draggrid = function (containerObj, option) {
                     'left': util.scaling.transformX(event2.pageX - parentContainerInvalidOffset.left - abs_x),
                     'top': util.scaling.transformY(event2.pageY - parentContainerInvalidOffset.top - abs_y),
                 });
+                
+                (self.option.on.onMove || $.noop)(event, div);
             });
         });
 
@@ -205,6 +218,7 @@ var draggrid = function (containerObj, option) {
                     "width": util.scaling.transformX(width),
                     "height": util.scaling.transformY(height)
                 });
+                (self.option.on.onResize || $.noop)(event, div);
             })
         });
 
@@ -217,6 +231,14 @@ var draggrid = function (containerObj, option) {
         /*删除*/
         $(document).on("click", "[name=_btnDel_]", function (event) {
             util.panel.getContainerDiv(this).remove();
+        });
+        
+        /*编辑*/
+        $(document).on("click", "[name="+self.option.btnEditName+"]", function (event) {
+            event.stopPropagation();
+            //面板对象    
+            var div = self._cache.currentDivObj = util.panel.getContainerDiv(this);
+            (self.option.on.onEdit || $.noop)(div);
         });
 
 
@@ -232,6 +254,7 @@ var draggrid = function (containerObj, option) {
                             <a class="draggrid-btn-delete-img draggrid-btn-base-img" name="_btnDel_" title="删除"></a>\
                             <a class="draggrid-btn-move-img draggrid-btn-base-img" name="_btnMove_" title="移动"></a>\
                             <a class="draggrid-btn-resize-img draggrid-btn-base-img" name="_btnTriggerResize_" title="修改大小"></a>\
+                            <a class="draggrid-btn-edit-img draggrid-btn-base-img" name="_btnEdit_" title="编辑"></a>\
                         </div>\
                         <div name="childShade" class="draggrid-fullscreen draggrid-childshade draggrid-hide">\
                             <img class="draggrid-resize-img" name="_resize_" style="z-index: $z-index;"></img>\
@@ -254,7 +277,7 @@ var draggrid = function (containerObj, option) {
 
     self.addGrid = function (jsonData) {
         $.each(jsonData, function (i, _d) {
-            if (_d.pId == '-1') {
+            if (_d.pId == '-1' || _.isNull(_d)) {
                 $(containerObj).append(template(i, _d));
             }
         });
